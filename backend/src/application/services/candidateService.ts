@@ -54,12 +54,11 @@ export const addCandidate = async (candidateData: any) => {
     }
 };
 
-export const findCandidateById = async (id: number): Promise<Candidate | null> => {
+export const getCandidateById = async (id: number): Promise<Candidate | null> => {
     try {
-        const candidate = await Candidate.findOne(id); // Cambio aquí: pasar directamente el id
+        const candidate = await Candidate.findOne(id);
         return candidate;
-    } catch (error) {
-        console.error('Error al buscar el candidato:', error);
-        throw new Error('Error al recuperar el candidato');
+    } catch (error: any) {
+        throw new Error('Database connection error');
     }
 };
