@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
 import candidateRoutes from './routes/candidateRoutes';
 import { uploadFile } from './application/services/fileUploadService';
+import positionRoutes from './routes/positionRoutes';
 import cors from 'cors';
 
 // Extender la interfaz Request para incluir prisma
@@ -36,6 +37,11 @@ app.use(cors({
   credentials: true
 }));
 
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
+});
+
 // Import and use candidateRoutes
 app.use('/candidates', candidateRoutes);
 
@@ -62,3 +68,5 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
+app.use('/positions', positionRoutes);

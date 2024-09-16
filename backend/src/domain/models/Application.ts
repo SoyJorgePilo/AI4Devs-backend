@@ -50,4 +50,12 @@ export class Application {
         if (!data) return null;
         return new Application(data);
     }
+    
+    static async findByCandidateId(candidateId: number): Promise<Application | null> {
+        const data = await prisma.application.findFirst({
+            where: { candidateId: candidateId },
+        });
+        if (!data) return null;
+        return new Application(data);
+    }
 }

@@ -3,6 +3,11 @@ import { validateCandidateData } from '../validator';
 import { Education } from '../../domain/models/Education';
 import { WorkExperience } from '../../domain/models/WorkExperience';
 import { Resume } from '../../domain/models/Resume';
+import { PrismaClient } from '@prisma/client';
+import { Application } from '../../domain/models/Application';
+import { InterviewStep } from '../../domain/models/InterviewStep';
+
+const prisma = new PrismaClient();
 
 export const addCandidate = async (candidateData: any) => {
     try {
@@ -62,4 +67,23 @@ export const findCandidateById = async (id: number): Promise<Candidate | null> =
         console.error('Error al buscar el candidato:', error);
         throw new Error('Error al recuperar el candidato');
     }
+};
+
+export const updateCandidateInterviewStepService = async (applicationId: number, newInterviewStepId: number) => {
+    const application = await Application.findOne(applicationId);
+
+    if (!application) {
+        return null;
+    }
+
+    const interviewStep = await InterviewStep.findOne(newInterviewStepId);
+
+    if (!interviewStep) {
+        throw new Error('Invalid interview step');
+    }
+
+    application.currentInterviewStep = newInterviewStepId;
+    await application.save();
+
+    return application;
 };
